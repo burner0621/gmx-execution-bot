@@ -1,0 +1,17 @@
+{
+    "name": "ExecutePosition",
+    "version": "1.0.0",
+    "description": "price feed USDT on core chain",
+    "main": "startExecutePosition.js",
+    "scripts": {
+        "start": "node startExecutePosition.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "bignumber.js": "^9.1.1",
+        "fs": "^0.0.1-security",
+        "web3": "^1.8.2"
+    }
+}
