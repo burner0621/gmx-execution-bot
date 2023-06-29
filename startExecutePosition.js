@@ -7,7 +7,7 @@ BN.config({
 
 const { newContract, newWeb3, queryContract, executeContract, getGasEstimation } = require('./web3')
 const { sleep } = require('./common')
-const tokenArray = require('../GMX-MEME-SmartContract/scripts/core/tokens.js')
+const tokenArray = require('../GMX-POLO-SmartContract/scripts/core/tokens.js')
 
 async function main() {
     const pvkey = fs.readFileSync('.env').toString().trim()
@@ -16,7 +16,7 @@ async function main() {
     const PositionRouter = JSON.parse(fs.readFileSync('./abi/PositionRouter.json').toString())
     const PositionManager = JSON.parse(fs.readFileSync('./abi/PositionManager.json').toString())
     const Vault = JSON.parse(fs.readFileSync('./abi/Vault.json').toString())
-    let coreData = JSON.parse(fs.readFileSync('../GMX-MEME-SmartContract/scripts/deploy-core.json').toString())
+    let coreData = JSON.parse(fs.readFileSync('../GMX-POLO-SmartContract/scripts/deploy-core.json').toString())
     addresses = {}
     for (let i of coreData){
         addresses[i.name] = i.imple
@@ -93,9 +93,9 @@ async function main() {
                     throw new Error(`${tokens[i]}: price could not be obtained`)
                 }
 
-                priceBits = priceBits.plus(BN(pc.toString()).times(precisions[i].toString()).div('100000000').integerValue().times(BN(2).pow(32 * i)))
+                priceBits = priceBits.plus(BN(pc).times(precisions[i]).div('100000000').integerValue().times(BN(2).pow(32 * i)))
             }
-            
+
             let startIncreaseIdx = await queryContract(positionRouterContract.methods.increasePositionRequestKeysStart())
             startIncreaseIdx = parseInt(startIncreaseIdx.toString())
             let endIncreaseIdx
@@ -186,7 +186,7 @@ async function main() {
                 }
             } else {
                 if (startIncreaseIdx < endIncreaseIdx || startDecreaseIdx < endDecreaseIdx) {
-                    console.log("Eagle", priceBits.toString(),
+                    console.log("Eagle", priceBits,
                         Math.floor((new Date()).getTime() / 1000),
                         endIncreaseIdx,
                         endDecreaseIdx,
@@ -196,7 +196,7 @@ async function main() {
                     try {
                         await executeContract(coreContext, fastPriceFeedContract._address, fastPriceFeedContract.methods.setPricesWithBitsAndExecute(
                             positionRouterInfo,
-                            priceBits.toString(),
+                            priceBits,
                             Math.floor((new Date()).getTime() / 1000),
                             endIncreaseIdx,
                             endDecreaseIdx,
