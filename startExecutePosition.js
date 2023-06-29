@@ -95,7 +95,7 @@ async function main() {
 
                 priceBits = priceBits.plus(BN(pc.toString()).times(precisions[i].toString()).div('100000000').integerValue().times(BN(2).pow(32 * i)))
             }
-            
+
             let startIncreaseIdx = await queryContract(positionRouterContract.methods.increasePositionRequestKeysStart())
             startIncreaseIdx = parseInt(startIncreaseIdx.toString())
             let endIncreaseIdx
